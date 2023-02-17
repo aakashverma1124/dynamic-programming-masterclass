@@ -20,16 +20,15 @@ class Solution {
     }
     public int minFallingPathSum(int[][] matrix) {
         
-        int rows = matrix.length;
-        int cols = matrix[0].length;
+        int n = matrix.length;
         int minimumSum = Integer.MAX_VALUE;
 
-        int[][] dp = new int[rows][cols];
+        int[][] dp = new int[n][n];
         for(int d[] : dp) {
             Arrays.fill(d, -1);
         }
 
-        for(int col = 0; col < cols; col++) {
+        for(int col = 0; col < n; col++) {
             int currentSum = solve(0, col, matrix, dp);
             minimumSum = Math.min(minimumSum, currentSum);
         }
