@@ -17,7 +17,3 @@ def solve(n, dp) :
 def integerBreak(n):
     dp = [-1] * (n + 1)
     return solve(n, dp)
-
-if __name__ == "__main__" :
-    # print(numSquares(5))
-    print(integerBreak(6))
