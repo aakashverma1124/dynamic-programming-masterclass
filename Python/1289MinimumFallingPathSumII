@@ -1,0 +1,70 @@
+# DP TOP DOWN 
+class Solution:
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        # n is the length of matrix
+        n=len(matrix)
+        # make dp and and fill it with 0 
+        dp = [[0 for i in range(n)] for i in range(n)]
+        # if col and row size is 1 
+        if len(matrix[0]) == 1 and len(matrix) == 1:
+            return matrix[0][0]
+        # for col
+        for j in range(len(matrix[0])):
+            dp[0][j] = matrix[0][j]
+        # now, we have many choices for column except adjacent element in same column
+        for i in range(1, len(matrix)):
+            for j in range(0,len(matrix[0])):
+                minimum = math.inf
+                for col in range(len(matrix[0])):      
+                    # we can't consider the adjacent element in 
+                    # same column
+                    if col != j: 
+                        min_path = matrix[i][j]  + dp[i-1][col]
+                        #take min of prev min and current min_path
+                        minimum = min(minimum, min_path)
+                dp[i][j] = minimum
+        return min(dp[len(matrix)-1])
+
+# DP Memoization {TLE}
+class Solution:
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        # solve funtion will give us minimum pathsum 
+        def solve(row, col, matrix):
+            # base conditions
+            # if we are on the last row then just return
+            # the element of triangle bcz we don't have choices further
+            # after that
+            if row == len(matrix)-1:
+                return matrix[row][col]
+            # if in any position of matrix there is a element
+            # other than the -1 then simply return the element,
+            # because the recursive call for the same has already occurred
+            if dp[row][col] != -1:
+                return dp[row][col]
+            # now, we have many choices for column except adjacent element in same column
+            minimum = math.inf
+            for c in range(len(matrix[0])) :
+                if c == col:
+                    # if column is same
+                    # then skip
+                    continue
+                else:
+                    # else calculate the minimum path
+                    minimum = min(minimum, matrix[row][col] + solve(row + 1, c, matrix))
+            dp[row][col] = minimum
+            return dp[row][col]
+        # n is the length of matrix
+        n = len(matrix)
+        min_pathsum = math.inf
+        # make dp and and fill it with -1 
+        dp = [[-1 for i in range(n)] for i in range(n)]
+        # for every column we have n choices 
+        # we can start with any of the columns
+        for col in range(n):
+            # pathsum will calculate the sum of path for each columns
+            # here 0 represents row ( starting row is 0)
+            # col represent col as in 0th row we can start with any of
+            # the column and return the min path
+            pathsum = solve(0, col, matrix)
+            min_pathsum = min(min_pathsum, pathsum)
+        return min_pathsum
